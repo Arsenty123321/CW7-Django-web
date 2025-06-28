@@ -80,3 +80,30 @@ class Mailing(models.Model):
 
     def __str__(self):
         return f"Сообщение:{self.message}, статус:{self.status}"
+
+
+class MailingAttempt(models.Model):
+    attempt_send_data = models.DateTimeField(auto_now=True, verbose_name="Дата и время попытки")
+    STATUS_CHOICES = [
+        ("Success", "Успешно"),
+        ("Failed", "Не успешно"),
+    ]
+    attempt_status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES, default="Success"
+    )
+    answer = models.TextField(verbose_name="Ответ почтового сервера")
+    Mailing = models.ForeignKey(
+        Mailing,
+        verbose_name="Рассылка",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self):
+        return f"{self.attempt_send_data} - {self.attempt_status}"
+
+    class Meta:
+        verbose_name = "Попытка рассылки"
+        verbose_name_plural = "Попытки рассылок"
+        ordering = ["id"]
