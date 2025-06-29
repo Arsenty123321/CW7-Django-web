@@ -1,0 +1,79 @@
+<!-- mailing_list.html -->
+
+{% extends 'mailer/base.html' %}
+
+{% block title %} Сервис рассылок : Рассылки {% endblock %}
+
+{% block content %}
+
+<!--Список продуктов-->
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+
+        {% for mailing in mailings %}
+
+        <!--        {#% if product.status == "published" or perms.catalog.can_unpublish_product or user == product.owner %}-->
+        <div class="col">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header text-center">
+                    <h4 class="my-0 font-weight-normal">ID {{ mailing.id }}:
+                        {{ mailing.message.title | truncatechars:40}}</h4>
+                </div>
+                <div class="card-body">
+                    <p>Текс: {{ mailing.message.content|truncatechars:300 }}</p>
+                    <p>Status: {{ mailing.status }}</p>
+
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        <div class="col">
+                            <a href="{% url 'mailer:mailing_detail' mailing.id %}">
+                                <button type="button" class="btn btn-md btn-block btn-outline-primary">
+                                    Просмотреть
+                                </button>
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a href="{% url 'mailer:mailing_update' mailing.id %}">
+                                <button type="button" class="btn btn-md btn-block btn-outline-primary">
+                                    Редактировать
+                                </button>
+                            </a>
+                        </div>
+                        <!--                        {#% if user.is_authenticated %}-->
+
+                        <!--                        {#% if user == mailing.owner %}-->
+
+                        <div class="col">
+                            <div class="mt-auto d-flex justify-content-end">
+                                <a class="btn btn-danger" href="{% url 'mailer:mailing_delete' mailing.pk %}"
+                                   role="button">Удалить</a>
+                            </div>
+                        </div>
+                        <!--                        {#% endif %}-->
+                        <!--                        {#% endif %}-->
+                    </div>
+                </div>
+
+                <!--                {#% if mailing.status == "blocked" %}-->
+                <!--                <div class="card-footer text-white bg-danger text-center">-->
+                <!--                    {{ mailing.status }}-->
+                <!--                </div>-->
+                <!--                {#% endif %}-->
+
+            </div>
+        </div>
+
+        <!--        {#% endif %}-->
+
+        {% endfor %}
+    </div>
+    <!--    {#% if user.is_authenticated %}-->
+    <div class="text-center">
+        <a class="btn btn-primary btn-lg shadow" href="{% url 'mailer:mailing_create' %}" role="button">Добавить
+            рассылку</a>
+        <br>
+    </div>
+    <!--    {#% endif %}-->
+</div>
+<!--Список продуктов - конец-->
+
+{% endblock %}
