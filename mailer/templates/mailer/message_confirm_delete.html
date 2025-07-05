@@ -1,0 +1,41 @@
+<!-- message_confirm_delete.html -->
+
+{% extends 'mailer/base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>Удалить</h4>
+                </div>
+                <div class="card-body text-center">
+                    <p class="card-text">Действительно хотите удалить: "{{ message.title }}"?</p>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row row-cols-1 row-cols-md-2 g-1 ">
+                            <div class="col">
+                                <div class="d-flex justify-content-center align-items-center mb-5">
+                                    <button type="submit" class="btn btn-lg btn-block btn-danger">Удалить
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="d-flex justify-content-center align-items-center mb-5">
+                                    <a href="{{ request.META.HTTP_REFERER|default:'/' }}">
+                                        <button type="button" class="btn btn-lg btn-block btn-outline-primary">Отменить
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

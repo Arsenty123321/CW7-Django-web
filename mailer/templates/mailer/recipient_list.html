@@ -1,4 +1,4 @@
-<!-- mailing_list.html -->
+<!-- recipient_list.html -->
 
 {% extends 'mailer/base.html' %}
 
@@ -7,36 +7,35 @@
 {% block content %}
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h1 class="display-6">Рассылки:</h1>
+    <h1 class="display-6">Получатели:</h1>
 </div>
 
-<!--Список рассылок-->
+<!--Список получателей-->
 <div class="container">
     <div class="row row-cols-1 row-cols-md-3 g-4">
 
-        {% for mailing in mailings %}
+        {% for recipient in recipients %}
 
         <!--        {#% if product.status == "published" or perms.catalog.can_unpublish_product or user == product.owner %}-->
         <div class="col">
             <div class="card mb-4 box-shadow">
                 <div class="card-header text-center">
-                    <h4 class="my-0 font-weight-normal">ID {{ mailing.id }}:
-                        {{ mailing.message.title | truncatechars:40}}</h4>
+                    <h4 class="my-0 font-weight-normal">ID {{ recipient.email }}:
+                        {{ recipient.full_name | truncatechars:40}}</h4>
                 </div>
                 <div class="card-body">
-                    <p>Текс: {{ mailing.message.content|truncatechars:300 }}</p>
-                    <p>Status: {{ mailing.status }}</p>
+                    <p>Комментарий: {{ recipient.comment|truncatechars:300 }}</p>
 
                     <div class="row row-cols-1 row-cols-md-3 g-4">
                         <div class="col">
-                            <a href="{% url 'mailer:mailing_detail' mailing.id %}">
+                            <a href="{% url 'mailer:recipient_detail' recipient.id %}">
                                 <button type="button" class="btn btn-md btn-block btn-outline-primary">
                                     Просмотреть
                                 </button>
                             </a>
                         </div>
                         <div class="col">
-                            <a href="{% url 'mailer:mailing_update' mailing.id %}">
+                            <a href="{% url 'mailer:recipient_update' recipient.id %}">
                                 <button type="button" class="btn btn-md btn-block btn-outline-primary">
                                     Редактировать
                                 </button>
@@ -48,7 +47,7 @@
 
                         <div class="col">
                             <div class="mt-auto d-flex justify-content-end">
-                                <a class="btn btn-danger" href="{% url 'mailer:mailing_delete' mailing.pk %}"
+                                <a class="btn btn-danger" href="{% url 'mailer:recipient_delete' recipient.pk %}"
                                    role="button">Удалить</a>
                             </div>
                         </div>
@@ -72,8 +71,8 @@
     </div>
     <!--    {#% if user.is_authenticated %}-->
     <div class="text-center">
-        <a class="btn btn-primary btn-lg shadow" href="{% url 'mailer:mailing_create' %}" role="button">Добавить
-            рассылку</a>
+        <a class="btn btn-primary btn-lg shadow" href="{% url 'mailer:recipient_create' %}" role="button">Добавить
+            получателя</a>
         <br>
     </div>
     <!--    {#% endif %}-->
