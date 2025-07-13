@@ -6,7 +6,7 @@
         <a class="p-2 btn btn-outline-primary" href="{% url 'mailer:mailing_list' %}">Рассылки</a>
         <a class="p-2 btn btn-outline-primary" href="{% url 'mailer:message_list' %}">Сообщения</a>
         <a class="p-2 btn btn-outline-primary" href="{% url 'mailer:recipient_list' %}">Получатели</a>
-        <a class="p-2 btn btn-outline-primary" href="{#% url 'mailer:mailer_list' %}">Статистика</a>
+        <a class="p-2 btn btn-outline-primary" href="{% url 'mailer:mailing_stats' %}">Статистика</a>
         {% endif %}
         <ul class="navbar-nav">
             <li class="nav-item">

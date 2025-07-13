@@ -25,7 +25,15 @@
                     <h4>Дата и время окончания отправки:</h4>
                     <p>{{ mailing.end_datetime }}</p>
                     <br>
-                    <h4>Статус:</h4><p>{{ mailing.status }}</p>
+                    <h4>Получатели:</h4>
+                    <ul>
+                        {% for recipient in mailing.recipient.all %}
+                        <li>{{ recipient.email }} : {{ recipient.full_name }}</li>
+                        {% endfor %}
+                    </ul>
+                    <br>
+                    <h4>Статус:</h4>
+                    <p>{{ mailing.get_status_display }}</p>
 
                     <div class="row row-cols-1 row-cols-md-1 g-4 ">
                         <div class="col">

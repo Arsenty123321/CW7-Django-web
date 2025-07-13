@@ -13,7 +13,7 @@
                 </div>
                 <div class="card-body text-center">
                     <p class="card-text">Действительно хотите удалить: "{{ recipient.email }}"?</p>
-                    <p class="card-text">Действительно хотите удалить: "{{ recipient.full_name }}"?</p>
+                    <p class="card-text">Ф.И.О.: {{ recipient.full_name }}</p>
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="row row-cols-1 row-cols-md-2 g-1 ">

@@ -20,12 +20,12 @@
         <div class="col">
             <div class="card mb-4 box-shadow">
                 <div class="card-header text-center">
-                    <h4 class="my-0 font-weight-normal">ID {{ recipient.email }}:
+                    <h4 class="my-0 font-weight-normal"><img src="/media/mailer_images/recipient_icon.png" class="leftimg"
+                             style="height: 25px;"> {{ recipient.email }}:
                         {{ recipient.full_name | truncatechars:40}}</h4>
                 </div>
                 <div class="card-body">
                     <p>Комментарий: {{ recipient.comment|truncatechars:300 }}</p>
-
                     <div class="row row-cols-1 row-cols-md-3 g-4">
                         <div class="col">
                             <a href="{% url 'mailer:recipient_detail' recipient.id %}">

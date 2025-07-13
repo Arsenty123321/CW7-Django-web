@@ -54,7 +54,7 @@ class Mailing(models.Model):
                                         help_text="Введите дату и время окончания отправки")
     STATUS_CHOICES = [
         ('Created', 'Создана'),
-        ('Running', 'Запущена'),
+        ('Launched', 'Запущена'),
         ('Completed', 'Завершена'),
     ]
     status = models.CharField(max_length=10,
@@ -92,10 +92,10 @@ class MailingAttempt(models.Model):
         max_length=10, choices=STATUS_CHOICES, default="Success"
     )
     answer = models.TextField(verbose_name="Ответ почтового сервера")
-    Mailing = models.ForeignKey(
+    mailing = models.ForeignKey(
         Mailing,
         verbose_name="Рассылка",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
         blank=True,
     )

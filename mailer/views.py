@@ -3,19 +3,28 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from mailer.forms import MailingForm
+from mailer.mixins import OwnerRequiredMixin
 from mailer.models import Mailing, MailMessage, MailingRecipient
+from mailer.services import get_user_stats, get_mailings_stats, get_general_stats
 
 
 class HomeTemplateView(TemplateView):
     template_name = "mailer/index.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-class MailingListView(ListView):
+        # Общая статистика сервиса
+        context["general_stats"] = get_general_stats()
+        return context
+
+
+class MailingListView(LoginRequiredMixin, ListView):
     model = Mailing
     context_object_name = 'mailings'
 
 
-class MailingDetailView(LoginRequiredMixin, DetailView):
+class MailingDetailView(OwnerRequiredMixin, DetailView):
     model = Mailing
     context_object_name = "mailing"
 
@@ -31,7 +40,7 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class MailingUpdateView(LoginRequiredMixin, UpdateView):
+class MailingUpdateView(OwnerRequiredMixin, UpdateView):
     model = Mailing
     form_class = MailingForm
     success_url = reverse_lazy("mailer:mailing_list")
@@ -40,21 +49,19 @@ class MailingUpdateView(LoginRequiredMixin, UpdateView):
         return reverse("mailer:mailing_detail", args=[self.kwargs.get("pk")])
 
 
-class MailingDeleteView(LoginRequiredMixin, DeleteView):
+class MailingDeleteView(OwnerRequiredMixin, DeleteView):
     model = Mailing
     context_object_name = "mailing"
     success_url = reverse_lazy("mailer:mailing_list")
 
 
-# AAAAAAAAAAAAAAAAAAAAAA
-
-class MessageListView(ListView):
+class MessageListView(LoginRequiredMixin, ListView):
     model = MailMessage
     context_object_name = 'messages'
     template_name = "mailer/message_list.html"
 
 
-class MessageDetailView(LoginRequiredMixin, DetailView):
+class MessageDetailView(OwnerRequiredMixin, DetailView):
     model = MailMessage
     context_object_name = "message"
     template_name = "mailer/message_detail.html"
@@ -72,7 +79,7 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class MessageUpdateView(LoginRequiredMixin, UpdateView):
+class MessageUpdateView(OwnerRequiredMixin, UpdateView):
     model = MailMessage
     fields = ("title", "content")
     template_name = "mailer/message_form.html"
@@ -82,21 +89,20 @@ class MessageUpdateView(LoginRequiredMixin, UpdateView):
         return reverse("mailer:message_detail", args=[self.kwargs.get("pk")])
 
 
-class MessageDeleteView(LoginRequiredMixin, DeleteView):
+class MessageDeleteView(OwnerRequiredMixin, DeleteView):
     model = MailMessage
     context_object_name = "message"
     template_name = "mailer/message_confirm_delete.html"
     success_url = reverse_lazy("mailer:message_list")
 
-# ##### BBBBBBBBBBBBB
-#
-class RecipientListView(ListView):
+
+class RecipientListView(LoginRequiredMixin, ListView):
     model = MailingRecipient
     context_object_name = 'recipients'
     template_name = "mailer/recipient_list.html"
 
 
-class RecipientDetailView(LoginRequiredMixin, DetailView):
+class RecipientDetailView(OwnerRequiredMixin, DetailView):
     model = MailingRecipient
     context_object_name = "recipient"
     template_name = "mailer/recipient_detail.html"
@@ -114,7 +120,7 @@ class RecipientCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class RecipientUpdateView(LoginRequiredMixin, UpdateView):
+class RecipientUpdateView(OwnerRequiredMixin, UpdateView):
     model = MailingRecipient
     fields = ("email", "full_name", "comment")
     template_name = "mailer/recipient_form.html"
@@ -124,8 +130,42 @@ class RecipientUpdateView(LoginRequiredMixin, UpdateView):
         return reverse("mailer:recipient_detail", args=[self.kwargs.get("pk")])
 
 
-class RecipientDeleteView(LoginRequiredMixin, DeleteView):
+class RecipientDeleteView(OwnerRequiredMixin, DeleteView):
     model = MailingRecipient
     context_object_name = "recipient"
     template_name = "mailer/recipient_confirm_delete.html"
     success_url = reverse_lazy("mailer:recipient_list")
+
+
+class MailingStatsView(LoginRequiredMixin, TemplateView):
+    template_name = "mailer/mailing_stats.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        # Общая статистика пользователя
+        user_stats = get_user_stats(user)
+
+        context.update({
+            "user_stats": user_stats,
+        })
+        return context
+
+
+class MailingDetailStatsView(OwnerRequiredMixin, DetailView):
+    model = Mailing
+    context_object_name = "mailing"
+    template_name = "mailer/mailing_detail_stats.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        mailing = self.object
+
+        # Детальная статистика по рассылке
+        mailing_stats = get_mailings_stats(mailing)
+
+        context.update({
+            "mailing_stats": mailing_stats,
+        })
+        return context
