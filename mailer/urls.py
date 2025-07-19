@@ -3,7 +3,7 @@ from mailer.apps import MailerConfig
 from .views import HomeTemplateView, MailingListView, MailingDetailView, MailingCreateView, MailingUpdateView, \
     MailingDeleteView, MessageListView, MessageDetailView, MessageCreateView, MessageUpdateView, MessageDeleteView, \
     RecipientListView, RecipientDetailView, RecipientCreateView, RecipientUpdateView, RecipientDeleteView, \
-    MailingStatsView, MailingDetailStatsView
+    MailingStatsView, MailingDetailStatsView, mailing_complete_view, mailing_launch_view, mailing_run_view
 
 app_name = MailerConfig.name
 
@@ -14,6 +14,9 @@ urlpatterns = [
     path("mailing_create/", MailingCreateView.as_view(), name="mailing_create"),
     path("mailing/<int:pk>/update/", MailingUpdateView.as_view(), name="mailing_update"),
     path("mailing/<int:pk>/delete/", MailingDeleteView.as_view(), name="mailing_delete"),
+    path("mailing/<int:pk>/run_mailing/", mailing_run_view, name="mailing_run"),
+    path("mailing/<int:pk>/launch/", mailing_launch_view, name="mailing_launch"),
+    path("mailing/<int:pk>/complete/", mailing_complete_view, name="mailing_complete"),
     path("message_list/", MessageListView.as_view(), name="message_list"),
     path("message/<int:pk>/", MessageDetailView.as_view(), name="message_detail"),
     path("message_create/", MessageCreateView.as_view(), name="message_create"),
@@ -26,4 +29,6 @@ urlpatterns = [
     path("recipient/<int:pk>/delete/", RecipientDeleteView.as_view(), name="recipient_delete"),
     path("mailing_detail_stats/<int:pk>/", MailingDetailStatsView.as_view(), name="mailing_stats_detail"),
     path("stats/", MailingStatsView.as_view(), name="mailing_stats"),
+    path('mailing_complete_func/<int:pk>/', mailing_complete_view, name='mailing_complete_func'),
+    #    path('run_mailing/<int:id>/', execute_service_function, name='run_mailing'),
 ]

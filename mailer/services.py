@@ -19,7 +19,8 @@ def validate_mailing(mailing):
     if mailing.end_datetime and cur_time > mailing.end_datetime:
         mailing.status = "Completed"
         mailing.save()
-        raise ValidationError("Время рассылки окончено")
+        raise ValidationError(f"Время рассылки окончено - статус рассылки изменен на \"Завершена\" | "
+                              f"ID:{mailing.id} - {mailing.message.title}")
 
     if mailing.status != "Launched":
         mailing.status = "Launched"
@@ -38,6 +39,16 @@ def update_status_by_lifetime(mailing):
     if mailing.end_datetime and cur_time > mailing.end_datetime:
         mailing.status = "Completed"
         mailing.save()
+
+
+def set_mailing_status(mailing_id, status):
+    """
+        Изменение статуса рассылки
+    """
+
+    mailing = Mailing.objects.get(pk=mailing_id)
+    mailing.status = status
+    mailing.save()
 
 
 def send_mailing(mailing_id):

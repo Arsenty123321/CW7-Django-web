@@ -11,6 +11,19 @@
 </div>
 
 <!--Список рассылок-->
+{% if messages %}
+
+    <div class="messages text-center">
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endif %}
+
 <div class="container">
     <div class="row row-cols-1 row-cols-md-3 g-4">
 
@@ -33,22 +46,22 @@
                         <div class="col">
 
                             {% if mailing.status != "Launched" %}
-                            <a href="{% url 'mailer:mailing_detail' mailing.id %}">
+                            <a href="{% url 'mailer:mailing_launch' mailing.id %}">
                                 <button type="button" class="btn btn-md btn-block btn-outline-primary">
                                     Запустить
                                 </button>
                             </a>
                             {% else %}
-                            <a href="{% url 'mailer:mailing_detail' mailing.id %}">
+                            <a href="{% url 'mailer:mailing_complete' mailing.id %}">
                                 <button type="button" class="btn btn-md btn-block btn-outline-primary">
-                                    Остановить
+                                    Завершить
                                 </button>
                             </a>
                             {% endif %}
                         </div>
                         {% if mailing.status != "Completed" %}
                         <div class="col">
-                            <a href="{% url 'mailer:mailing_detail' mailing.id %}">
+                            <a href="{% url 'mailer:mailing_run' mailing.id %}">
                                 <button type="button" class="btn btn-md btn-block btn-outline-primary">
                                     Отправить
                                 </button>

@@ -3,7 +3,10 @@
 {% extends 'mailer/base.html' %}
 
 {% block content %}
-<h1>Статистика по рассылке ID={{ mailing.id }}: {{ mailing.message.title }}</h1>
+<div class="d-flex justify-content-center align-items-center mb-4">
+    <h1>Попытки рассылки</h1><br>
+</div>
+<h2>Статистика по рассылке ID={{ mailing.id }}: {{ mailing.message.title }}</h2>
 
 <div class="card">
     <h2>Общие показатели</h2>

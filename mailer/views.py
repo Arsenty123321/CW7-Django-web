@@ -1,11 +1,15 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from mailer.forms import MailingForm
 from mailer.mixins import OwnerRequiredMixin
 from mailer.models import Mailing, MailMessage, MailingRecipient
-from mailer.services import get_user_stats, get_mailings_stats, get_general_stats
+from mailer.services import get_user_stats, get_mailings_stats, get_general_stats, send_mailing, set_mailing_status
 
 
 class HomeTemplateView(TemplateView):
@@ -169,3 +173,37 @@ class MailingDetailStatsView(OwnerRequiredMixin, DetailView):
             "mailing_stats": mailing_stats,
         })
         return context
+
+
+@login_required
+def mailing_run_view(request, pk):
+    mailing = get_object_or_404(Mailing, id=pk)
+    if request.user != mailing.owner:
+        raise PermissionDenied("У вас нет прав доступа к этому объекту.")
+
+    try:
+        send_mailing(mailing.id)
+        messages.success(request, f"Рассылка [{mailing.id}] успешно запущена", "success")
+    except Exception as e:
+        messages.error(request, str(e), "danger")
+    finally:
+        # Перенаправление на страницу рассылок
+        return redirect(request.META.get('HTTP_REFERER', reverse('mailer:mailing_list')))
+
+
+@login_required
+def mailing_launch_view(request, pk):
+    mailing = get_object_or_404(Mailing, id=pk)
+    if request.user != mailing.owner:
+        raise PermissionDenied("У вас нет прав доступа к этому объекту.")
+    set_mailing_status(pk, "Launched")
+    return redirect(request.META.get('HTTP_REFERER', reverse('mailer:mailing_list')))
+
+
+@login_required
+def mailing_complete_view(request, pk):
+    mailing = get_object_or_404(Mailing, id=pk)
+    if request.user != mailing.owner:
+        raise PermissionDenied("У вас нет прав доступа к этому объекту.")
+    set_mailing_status(pk, "Completed")
+    return redirect(request.META.get('HTTP_REFERER', reverse('mailer:mailing_list')))
