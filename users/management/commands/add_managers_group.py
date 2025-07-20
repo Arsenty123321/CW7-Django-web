@@ -1,7 +1,6 @@
 from django.core.management import BaseCommand
 from django.contrib.auth.models import Group, Permission
 
-import os
 from dotenv import load_dotenv
 
 load_dotenv(override=True)

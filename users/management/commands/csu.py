@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
+
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         user = User.objects.create(email=os.getenv('SUPER_USER_LOGIN_NAME'))
