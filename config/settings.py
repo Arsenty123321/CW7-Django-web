@@ -29,7 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mailer',
-    # 'users',
+    'users',
+    "phonenumber_field",
 ]
 
 MIDDLEWARE = [
@@ -116,11 +117,11 @@ STATICFILES_DIRS = (BASE_DIR / 'static/',)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# AUTH_USER_MODEL = 'users.User'
-#
-# LOGIN_URL = "/users/login/"
-# LOGIN_REDIRECT_URL = "/"
-# LOGOUT_REDIRECT_URL = "/"
+AUTH_USER_MODEL = 'users.User'
+
+LOGIN_URL = "/users/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_PORT = os.getenv('EMAIL_PORT')

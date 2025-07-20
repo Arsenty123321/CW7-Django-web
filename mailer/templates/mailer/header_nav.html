@@ -21,7 +21,7 @@
                 <a class="nav-link" href=#"> | </a>
             </li>
             <li class="nav-item">
-                <form method="post" action="{#% url 'users:logout' %}" style="display: inline;">
+                <form method="post" action="{% url 'users:logout' %}" style="display: inline;">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-link nav-link"> Выйти : {{ user.email }} )
                     </button>
@@ -29,13 +29,13 @@
             </li>
             {% else %}
             <li class="nav-item">
-                <a class="nav-link" href="{#% url 'users:login' %}">( Вход </a>
+                <a class="nav-link" href="{% url 'users:login' %}">( Вход </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href=#"> | </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{#% url 'users:register' %}"> Регистрация )</a>
+                <a class="nav-link" href="{% url 'users:register' %}"> Регистрация )</a>
             </li>
             {% endif %}
 

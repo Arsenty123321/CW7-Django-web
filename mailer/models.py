@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from users.models import User
 from django.db import models
 
 
@@ -20,6 +20,9 @@ class MailingRecipient(models.Model):
         verbose_name = "Получатель рассылки"
         verbose_name_plural = "Получатели рассылок"
         ordering = ["id"]
+        permissions = [
+            ("can_view_recipient", "Can view recipient"),
+        ]
 
     def __str__(self):
         return self.email
@@ -42,6 +45,9 @@ class MailMessage(models.Model):
         verbose_name = "Сообщение"
         verbose_name_plural = "Сообщения"
         ordering = ["id"]
+        permissions = [
+            ("can_view_message", "Can view message"),
+        ]
 
     def __str__(self):
         return self.title
@@ -77,6 +83,9 @@ class Mailing(models.Model):
         verbose_name = "Рассылка"
         verbose_name_plural = "Рассылки"
         ordering = ["id"]
+        permissions = [
+            ("can_view_mailing", "Can view mailing"),
+        ]
 
     def __str__(self):
         return f"Сообщение:{self.message}, статус:{self.status}"
