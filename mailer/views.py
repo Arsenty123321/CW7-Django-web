@@ -7,7 +7,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from mailer.forms import MailingForm
-from mailer.mixins import OwnerRequiredMixin
+from mailer.mixins import OwnerRequiredMixin, OwnerManagersRequiredMixin
 from mailer.models import Mailing, MailMessage, MailingRecipient
 from mailer.services import get_user_stats, get_mailings_stats, get_general_stats, send_mailing, set_mailing_status
 
@@ -27,8 +27,18 @@ class MailingListView(LoginRequiredMixin, ListView):
     model = Mailing
     context_object_name = 'mailings'
 
+    def get_queryset(self):
+        if self.request.user.groups.filter(name="mailing_manager").exists():
+            return Mailing.objects.all()
+        return Mailing.objects.filter(owner=self.request.user)
 
-class MailingDetailView(OwnerRequiredMixin, DetailView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_manager"] = self.request.user.groups.filter(name="mailing_manager").exists()
+        return context
+
+
+class MailingDetailView(OwnerManagersRequiredMixin, DetailView):
     model = Mailing
     context_object_name = "mailing"
 
@@ -38,9 +48,13 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
     form_class = MailingForm
     success_url = reverse_lazy("mailer:mailing_list")
 
+    def get_form_kwargs(self):
+        kwargs = super(MailingCreateView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
-        user = self.request.user
-        form.instance.owner = user
+        form.instance.owner = self.request.user
         return super().form_valid(form)
 
 
@@ -48,6 +62,11 @@ class MailingUpdateView(OwnerRequiredMixin, UpdateView):
     model = Mailing
     form_class = MailingForm
     success_url = reverse_lazy("mailer:mailing_list")
+
+    def get_form_kwargs(self):
+        kwargs = super(MailingUpdateView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def get_success_url(self):
         return reverse("mailer:mailing_detail", args=[self.kwargs.get("pk")])
@@ -59,13 +78,57 @@ class MailingDeleteView(OwnerRequiredMixin, DeleteView):
     success_url = reverse_lazy("mailer:mailing_list")
 
 
+class MailingStatsView(LoginRequiredMixin, TemplateView):
+    template_name = "mailer/mailing_stats.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        # Общая статистика пользователя
+        user_stats = get_user_stats(user)
+
+        context.update({
+            "user_stats": user_stats,
+        })
+        return context
+
+
+class MailingDetailStatsView(OwnerManagersRequiredMixin, DetailView):
+    model = Mailing
+    context_object_name = "mailing"
+    template_name = "mailer/mailing_detail_stats.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        mailing = self.object
+
+        # Детальная статистика по рассылке
+        mailing_stats = get_mailings_stats(mailing)
+
+        context.update({
+            "mailing_stats": mailing_stats,
+        })
+        return context
+
+
 class MessageListView(LoginRequiredMixin, ListView):
     model = MailMessage
     context_object_name = 'messages'
     template_name = "mailer/message_list.html"
 
+    def get_queryset(self):
+        if self.request.user.groups.filter(name="mailing_manager").exists():
+            return MailMessage.objects.all()
+        return MailMessage.objects.filter(owner=self.request.user)
 
-class MessageDetailView(OwnerRequiredMixin, DetailView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_manager"] = self.request.user.groups.filter(name="mailing_manager").exists()
+        return context
+
+
+class MessageDetailView(OwnerManagersRequiredMixin, DetailView):
     model = MailMessage
     context_object_name = "message"
     template_name = "mailer/message_detail.html"
@@ -105,8 +168,18 @@ class RecipientListView(LoginRequiredMixin, ListView):
     context_object_name = 'recipients'
     template_name = "mailer/recipient_list.html"
 
+    def get_queryset(self):
+        if self.request.user.groups.filter(name="mailing_manager").exists():
+            return MailingRecipient.objects.all()
+        return MailingRecipient.objects.filter(owner=self.request.user)
 
-class RecipientDetailView(OwnerRequiredMixin, DetailView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_manager"] = self.request.user.groups.filter(name="mailing_manager").exists()
+        return context
+
+
+class RecipientDetailView(OwnerManagersRequiredMixin, DetailView):
     model = MailingRecipient
     context_object_name = "recipient"
     template_name = "mailer/recipient_detail.html"
@@ -139,40 +212,6 @@ class RecipientDeleteView(OwnerRequiredMixin, DeleteView):
     context_object_name = "recipient"
     template_name = "mailer/recipient_confirm_delete.html"
     success_url = reverse_lazy("mailer:recipient_list")
-
-
-class MailingStatsView(LoginRequiredMixin, TemplateView):
-    template_name = "mailer/mailing_stats.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-
-        # Общая статистика пользователя
-        user_stats = get_user_stats(user)
-
-        context.update({
-            "user_stats": user_stats,
-        })
-        return context
-
-
-class MailingDetailStatsView(OwnerRequiredMixin, DetailView):
-    model = Mailing
-    context_object_name = "mailing"
-    template_name = "mailer/mailing_detail_stats.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        mailing = self.object
-
-        # Детальная статистика по рассылке
-        mailing_stats = get_mailings_stats(mailing)
-
-        context.update({
-            "mailing_stats": mailing_stats,
-        })
-        return context
 
 
 @login_required

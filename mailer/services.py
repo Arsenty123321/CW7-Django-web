@@ -81,16 +81,17 @@ def send_email(mailing, recipient):
     recipient_list = [recipient.email]
 
     try:
+        cur_time = timezone.now()
         send_mail(subject, message, from_email, recipient_list)
         # Логирование
         MailingAttempt.objects.create(mailing=mailing, attempt_status="Success",
-                                      answer=f"Отправлено получателю: {recipient.email} - Ok")
-        print(f"Рассылка[Id]={mailing_id}: Письмо отправлено получателю: {recipient.email}")
+                                      answer=f"Отправлено получателю [{cur_time}]: {recipient.email} - Ok")
+        print(f"Рассылка[Id]={mailing_id}: Письмо отправлено получателю [{cur_time}]: {recipient.email}")
     except Exception as e:
         # Логирование
         MailingAttempt.objects.create(mailing=mailing, attempt_status="Failed",
-                                      answer=f"Ошибка отправки: {recipient.email} {mailing.pk}: {e}")
-        print(f"Рассылка[Id]={mailing_id}: Ошибка отправки: {recipient.email} {mailing.pk}: {e}")
+                                      answer=f"Ошибка отправки [{cur_time}]: {recipient.email} {mailing.pk}: {e}")
+        print(f"Рассылка[Id]={mailing_id}: Ошибка отправки [{cur_time}]: {recipient.email} {mailing.pk}: {e}")
 
 
 def get_user_stats(user):

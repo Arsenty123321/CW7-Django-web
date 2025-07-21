@@ -70,6 +70,8 @@ class Mailing(models.Model):
                               help_text="Статус рассылки")
     message = models.ForeignKey(MailMessage, on_delete=models.CASCADE)
     recipient = models.ManyToManyField(MailingRecipient, verbose_name="Получатели")
+    is_disabled = models.BooleanField(default=False, verbose_name="Отключена")
+
     owner = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -85,6 +87,7 @@ class Mailing(models.Model):
         ordering = ["id"]
         permissions = [
             ("can_view_mailing", "Can view mailing"),
+            ("can_disable_mailing", "Can disable mailing"),
         ]
 
     def __str__(self):

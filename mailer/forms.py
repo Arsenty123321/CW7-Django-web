@@ -1,5 +1,5 @@
 from django.forms import ModelForm, BooleanField, forms
-from .models import Mailing
+from .models import Mailing, MailingRecipient, MailMessage
 
 
 class StyleFormMixin:
@@ -16,6 +16,14 @@ class MailingForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Mailing
         fields = ["message", "recipient", "start_datetime", "end_datetime"]
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(MailingForm, self).__init__(*args, **kwargs)
+
+        if user:
+            self.fields['recipient'].queryset = MailingRecipient.objects.filter(owner=user)
+            self.fields['message'].queryset = MailMessage.objects.filter(owner=user)
 
     def clean(self):
         cleaned_data = super().clean()

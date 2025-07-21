@@ -34,6 +34,7 @@
                                 </button>
                             </a>
                         </div>
+                        {% if user == recipient.owner %}
                         <div class="col">
                             <a href="{% url 'mailer:recipient_update' recipient.id %}">
                                 <button type="button" class="btn btn-md btn-block btn-outline-primary">
@@ -41,18 +42,13 @@
                                 </button>
                             </a>
                         </div>
-                        <!--                        {#% if user.is_authenticated %}-->
-
-                        <!--                        {#% if user == mailing.owner %}-->
-
                         <div class="col">
                             <div class="mt-auto d-flex justify-content-end">
                                 <a class="btn btn-danger" href="{% url 'mailer:recipient_delete' recipient.pk %}"
                                    role="button">Удалить</a>
                             </div>
                         </div>
-                        <!--                        {#% endif %}-->
-                        <!--                        {#% endif %}-->
+                        {% endif %}
                     </div>
                 </div>
 

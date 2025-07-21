@@ -13,14 +13,15 @@
 <!--Список рассылок-->
 {% if messages %}
 
-    <div class="messages text-center">
-        {% for message in messages %}
-            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
+<div class="messages text-center">
+    {% for message in messages %}
+    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} alert-dismissible fade show"
+         role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+    {% endfor %}
+</div>
 
 {% endif %}
 
@@ -29,12 +30,10 @@
 
         {% for mailing in mailings %}
 
-        <!--        {#% if product.status == "published" or perms.catalog.can_unpublish_product or user == product.owner %}-->
         <div class="col">
             <div class="card mb-4 box-shadow">
                 <div class="card-header text-center">
-                    <h4 class="my-0 font-weight-normal"><img src="/media/mailer_images/mailing_icon.png" class="leftimg"
-                             style="height: 30px;">
+                    <h4 class="my-0 font-weight-normal"><img src="/media/mailer_images/mailing_icon.png" class="leftimg" style="height: 30px;">
                         ID {{ mailing.id }}:
                         {{ mailing.message.title | truncatechars:40}}</h4>
                 </div>
@@ -43,6 +42,7 @@
                     <p>Status: {{ mailing.get_status_display }}</p>
 
                     <div class="row row-cols-1 row-cols-md-3 g-1">
+                    {% if user == mailing.owner %}
                         <div class="col">
 
                             {% if mailing.status != "Launched" %}
@@ -68,6 +68,7 @@
                             </a>
                         </div>
                         {% endif %}
+                    {% endif %}
 
                         {% if mailing.status != "Created" %}
                         <div class="col">
@@ -88,6 +89,7 @@
                                 </button>
                             </a>
                         </div>
+                        {% if user == mailing.owner %}
                         <div class="col">
                             <a href="{% url 'mailer:mailing_update' mailing.id %}">
                                 <button type="button" class="btn btn-md btn-block btn-outline-primary">
@@ -101,16 +103,28 @@
                                    role="button">Удалить</a>
                             </div>
                         </div>
+                        {% endif %}
+
                     </div>
+
+                    {% if is_manager %}
+                    <div class="row row-cols-2 row-cols-md-1 g-4 mt-0">
+                        <div class="col">
+                            <div class="mt-auto d-flex justify-content-center">
+                                <a class="btn btn-danger" href="{% url 'mailer:mailing_delete' mailing.pk %}"
+                                    role="button">Отключить_рассылку</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
 
                 </div>
 
-                <!--                {#% if mailing.status == "blocked" %}-->
-                <!--                <div class="card-footer text-white bg-danger text-center">-->
-                <!--                    {{ mailing.status }}-->
-                <!--                </div>-->
-                <!--                {#% endif %}-->
-
+                {% if mailing.is_disabled %}
+                <div class="card-footer text-white bg-danger text-center">
+                    Отключена! Обратитесь к менеджеру!
+                </div>
+                {% endif %}
             </div>
         </div>
 
@@ -119,8 +133,7 @@
         {% endfor %}
     </div>
     <div class="text-center">
-        <a class="btn btn-primary btn-lg shadow" href="{% url 'mailer:mailing_create' %}" role="button">Добавить
-            рассылку</a>
+        <a class="btn btn-primary btn-lg shadow" href="{% url 'mailer:mailing_create' %}" role="button">Добавить рассылку</a>
         <br>
     </div>
 </div>
