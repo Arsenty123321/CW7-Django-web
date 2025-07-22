@@ -33,3 +33,9 @@ class MailingForm(StyleFormMixin, ModelForm):
         if start_date_time and end_date_time and start_date_time >= end_date_time:
             raise forms.ValidationError("Дата начала должна быть раньше даты окончания")
         return cleaned_data
+
+
+class MailingDisableForm(StyleFormMixin, ModelForm):
+    class Meta:
+        model = Mailing
+        fields = ("id", "is_disabled")

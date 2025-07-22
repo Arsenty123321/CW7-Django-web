@@ -22,6 +22,12 @@ def validate_mailing(mailing):
         raise ValidationError(f"Время рассылки окончено - статус рассылки изменен на \"Завершена\" | "
                               f"ID:{mailing.id} - {mailing.message.title}")
 
+    if mailing.is_disabled:
+        mailing.status = "Completed"
+        mailing.save()
+        raise ValidationError("Рассылка отключена менеджером - статус рассылки изменен на \"Завершена\" | "
+                              f"ID:{mailing.id} - {mailing.message.title}")
+
     if mailing.status != "Launched":
         mailing.status = "Launched"
         if not mailing.start_datetime:

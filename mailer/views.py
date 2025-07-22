@@ -6,7 +6,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from mailer.forms import MailingForm
+from mailer.forms import MailingForm, MailingDisableForm
 from mailer.mixins import OwnerRequiredMixin, OwnerManagersRequiredMixin
 from mailer.models import Mailing, MailMessage, MailingRecipient
 from mailer.services import get_user_stats, get_mailings_stats, get_general_stats, send_mailing, set_mailing_status
@@ -61,7 +61,6 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
 class MailingUpdateView(OwnerRequiredMixin, UpdateView):
     model = Mailing
     form_class = MailingForm
-    success_url = reverse_lazy("mailer:mailing_list")
 
     def get_form_kwargs(self):
         kwargs = super(MailingUpdateView, self).get_form_kwargs()
@@ -70,6 +69,17 @@ class MailingUpdateView(OwnerRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse("mailer:mailing_detail", args=[self.kwargs.get("pk")])
+
+
+class MailingDisableView(LoginRequiredMixin, UpdateView):
+    model = Mailing
+    form_class = MailingDisableForm
+    success_url = reverse_lazy("mailer:mailing_list")
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.groups.filter(name="mailing_manager").exists():
+            raise PermissionDenied("У вас нет прав доступа к этой странице.")
+        return super().dispatch(request, *args, **kwargs)
 
 
 class MailingDeleteView(OwnerRequiredMixin, DeleteView):
@@ -150,7 +160,6 @@ class MessageUpdateView(OwnerRequiredMixin, UpdateView):
     model = MailMessage
     fields = ("title", "content")
     template_name = "mailer/message_form.html"
-    success_url = reverse_lazy("mailer:message_list")
 
     def get_success_url(self):
         return reverse("mailer:message_detail", args=[self.kwargs.get("pk")])
@@ -201,7 +210,6 @@ class RecipientUpdateView(OwnerRequiredMixin, UpdateView):
     model = MailingRecipient
     fields = ("email", "full_name", "comment")
     template_name = "mailer/recipient_form.html"
-    success_url = reverse_lazy("mailer:recipient_list")
 
     def get_success_url(self):
         return reverse("mailer:recipient_detail", args=[self.kwargs.get("pk")])

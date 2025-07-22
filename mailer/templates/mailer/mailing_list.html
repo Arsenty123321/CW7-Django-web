@@ -38,11 +38,11 @@
                         {{ mailing.message.title | truncatechars:40}}</h4>
                 </div>
                 <div class="card-body">
-                    <p>Текс: {{ mailing.message.content|truncatechars:300 }}</p>
-                    <p>Status: {{ mailing.get_status_display }}</p>
+                    <p><strong>Текс сообщения:</strong><br>{{ mailing.message.content|truncatechars:300 }}</p>
+                    <p><strong>Status:</strong> {{ mailing.get_status_display }}</p>
 
                     <div class="row row-cols-1 row-cols-md-3 g-1">
-                    {% if user == mailing.owner %}
+                    {% if user == mailing.owner and not mailing.is_disabled %}
                         <div class="col">
 
                             {% if mailing.status != "Launched" %}
@@ -99,7 +99,7 @@
                         </div>
                         <div class="col">
                             <div class="mt-auto d-flex justify-content-end">
-                                <a class="btn btn-danger" href="{% url 'mailer:mailing_delete' mailing.pk %}"
+                                <a class="btn btn-danger" href="{% url 'mailer:mailing_delete' mailing.id %}"
                                    role="button">Удалить</a>
                             </div>
                         </div>
@@ -111,8 +111,13 @@
                     <div class="row row-cols-2 row-cols-md-1 g-4 mt-0">
                         <div class="col">
                             <div class="mt-auto d-flex justify-content-center">
-                                <a class="btn btn-danger" href="{% url 'mailer:mailing_delete' mailing.pk %}"
+                                {% if mailing.is_disabled %}
+                                <a class="btn btn-primary" href="{% url 'mailer:mailing_disable_switch' mailing.id %}"
+                                    role="button">Включить_рассылку</a>
+                                {% else %}
+                                <a class="btn btn-danger" href="{% url 'mailer:mailing_disable_switch' mailing.id %}"
                                     role="button">Отключить_рассылку</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -122,7 +127,7 @@
 
                 {% if mailing.is_disabled %}
                 <div class="card-footer text-white bg-danger text-center">
-                    Отключена! Обратитесь к менеджеру!
+                    Рассылка отключена! Обратитесь к менеджеру!
                 </div>
                 {% endif %}
             </div>
