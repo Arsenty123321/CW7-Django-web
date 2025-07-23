@@ -2,16 +2,18 @@ import secrets
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
 from django.utils.crypto import get_random_string
 from django.views import View
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from django.contrib import messages
 
 from config.settings import EMAIL_HOST_USER
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, UserProfileForm
 from .models import User
 
 
@@ -40,6 +42,10 @@ class UserCreateView(CreateView):
 
 
 def email_verification(request, token):
+    """
+        Подтверждение почты пользователя
+    """
+
     user = get_object_or_404(User, token=token)
     user.is_active = True
     # Замена использованного токена новым (неизвестным)
@@ -49,6 +55,10 @@ def email_verification(request, token):
 
 
 class PasswordResetRequestView(View):
+    """
+        Запрос на восстановление пароля, на почту отправляется временный пароль
+    """
+
     def get(self, request):
         return render(request, 'users/password_reset_request_form.html')
 
@@ -76,6 +86,9 @@ class PasswordResetRequestView(View):
 
 
 class PasswordResetConfirmView(View):
+    """
+        Подтверждение сброса и установка нового пароля
+    """
 
     def get(self, request):
         form = SetPasswordForm(request.user)
@@ -96,3 +109,51 @@ class PasswordResetConfirmView(View):
         else:
             messages.error(request, 'Неверный временный пароль.')
             return redirect('users:password_reset_confirm')
+
+
+# class UserListView(LoginRequiredMixin, ListView):
+#     """
+#         Список пользователей для просмотра менеджером
+#     """
+#
+#     model = User
+#     template_name = "users/user_list.html"
+#     context_object_name = "users"
+#
+#     def get_queryset(self):
+#         #        if not is_manager(self.request.user):
+#         #            return HttpResponseForbidden('Доступ запрещен', status=403)
+#         return User.objects.all().order_by("id")
+#
+#     def dispatch(self, request, *args, **kwargs):
+#         if not request.user.groups.filter(name="mailing_manager").exists():
+#             # raise PermissionDenied("У вас нет прав доступа к этой странице.")
+#             return HttpResponseForbidden('У вас нет прав на просмотр этого списка')
+#         return super().dispatch(request, *args, **kwargs)
+
+
+class UserProfileDetailView(LoginRequiredMixin, DetailView):
+    """
+        Просмотр собственного профиля
+    """
+
+    model = User
+    template_name = "users/profile.html"
+    context_object_name = "user"
+
+    def get_object(self):
+        return self.request.user  # Возвращает текущего авторизованного пользователя
+
+
+class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
+    """
+        Редактирование собственного профиля
+    """
+
+    model = User
+    form_class = UserProfileForm
+    template_name = "users/profile_edit.html"
+    success_url = reverse_lazy("users:profile_detail")
+
+    def get_object(self):
+        return self.request.user
