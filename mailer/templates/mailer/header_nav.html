@@ -1,5 +1,9 @@
 <!--Верхняя панель навигации-->
 
+{% load cache %}
+
+{% cache 300 "header_nav_" user.email|default:"anonymous" %}
+
 {% load custom_filters %}
 
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
@@ -50,5 +54,7 @@
         </ul>
     </nav>
 </div>
+
+{% endcache %}
 
 <!--Верхняя панель навигации - конец-->
