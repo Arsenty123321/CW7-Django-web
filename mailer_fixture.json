@@ -1,0 +1,462 @@
+[
+{
+    "model": "mailer.mailingrecipient",
+    "pk": 1,
+    "fields": {
+        "email": "poni@wwwwww-horse.admin",
+        "full_name": "Эдуард Петкович",
+        "comment": "Не любит рассылки!",
+        "owner": 1
+    }
+},
+{
+    "model": "mailer.mailingrecipient",
+    "pk": 2,
+    "fields": {
+        "email": "tata@wwwwww-horse.admin",
+        "full_name": "Татьяна Татуинова",
+        "comment": "Обожает рассылки!",
+        "owner": 1
+    }
+},
+{
+    "model": "mailer.mailingrecipient",
+    "pk": 3,
+    "fields": {
+        "email": "mila@wwwwww-horse.admin",
+        "full_name": "Мила Завороткина",
+        "comment": "Иногда читает почту.",
+        "owner": 1
+    }
+},
+{
+    "model": "mailer.mailingrecipient",
+    "pk": 4,
+    "fields": {
+        "email": "tatu@tatuin.tat",
+        "full_name": "Тату Татуинов",
+        "comment": "Никогда не покидает свою планету!",
+        "owner": 7
+    }
+},
+{
+    "model": "mailer.mailingrecipient",
+    "pk": 5,
+    "fields": {
+        "email": "saturn@solar.sys",
+        "full_name": "Сатурн Иванович",
+        "comment": "От спама начинает вращать кольцами.",
+        "owner": 6
+    }
+},
+{
+    "model": "mailer.mailingrecipient",
+    "pk": 8,
+    "fields": {
+        "email": "www@ww.ww",
+        "full_name": "344 43 4",
+        "comment": "434 4 3 4",
+        "owner": 1
+    }
+},
+{
+    "model": "mailer.mailmessage",
+    "pk": 1,
+    "fields": {
+        "title": "Участвуйте в историческом забеге",
+        "content": "Объявляется исторический забег в исторических костюмах! Вход свободный.",
+        "owner": 1
+    }
+},
+{
+    "model": "mailer.mailmessage",
+    "pk": 2,
+    "fields": {
+        "title": "Акция на подковы нового сезона!",
+        "content": "Объявляется акция на замену старых подков на новые! Выгода 101 %!",
+        "owner": 1
+    }
+},
+{
+    "model": "mailer.mailmessage",
+    "pk": 3,
+    "fields": {
+        "title": "Прививки от всех болезней",
+        "content": "Приходи сам и приводи друга! Прививки от всех болезней! Каждый десятый пациент получает подарок!",
+        "owner": 1
+    }
+},
+{
+    "model": "mailer.mailmessage",
+    "pk": 4,
+    "fields": {
+        "title": "Сообщение от спамера 1",
+        "content": "Много много сладкого текста.......",
+        "owner": 6
+    }
+},
+{
+    "model": "mailer.mailmessage",
+    "pk": 5,
+    "fields": {
+        "title": "Сообщение от спамера 2",
+        "content": "Мало мало грустного текста.......",
+        "owner": 6
+    }
+},
+{
+    "model": "mailer.mailmessage",
+    "pk": 6,
+    "fields": {
+        "title": "Сообщение Админа",
+        "content": "Много текста...............",
+        "owner": 7
+    }
+},
+{
+    "model": "mailer.mailmessage",
+    "pk": 7,
+    "fields": {
+        "title": "Сообщение менеджера",
+        "content": "Отладка Отладка Отладка Отладка Отладка Отладка Отладка Отладка Отладка Отладка Отладка...",
+        "owner": 7
+    }
+},
+{
+    "model": "mailer.mailmessage",
+    "pk": 10,
+    "fields": {
+        "title": "223234",
+        "content": "32442 234 3 4234342",
+        "owner": 1
+    }
+},
+{
+    "model": "mailer.mailmessage",
+    "pk": 15,
+    "fields": {
+        "title": "99999999",
+        "content": "999999999999999999",
+        "owner": 1
+    }
+},
+{
+    "model": "mailer.mailmessage",
+    "pk": 16,
+    "fields": {
+        "title": "21212",
+        "content": "21212",
+        "owner": 6
+    }
+},
+{
+    "model": "mailer.mailing",
+    "pk": 1,
+    "fields": {
+        "start_datetime": "2025-06-06T09:00:00Z",
+        "end_datetime": "2025-08-19T09:00:00Z",
+        "status": "Launched",
+        "message": 3,
+        "is_disabled": false,
+        "owner": 1,
+        "recipient": [
+            1,
+            2,
+            3
+        ]
+    }
+},
+{
+    "model": "mailer.mailing",
+    "pk": 2,
+    "fields": {
+        "start_datetime": "2025-07-06T21:00:00Z",
+        "end_datetime": "2026-08-19T09:00:00Z",
+        "status": "Created",
+        "message": 2,
+        "is_disabled": false,
+        "owner": 1,
+        "recipient": [
+            1,
+            3
+        ]
+    }
+},
+{
+    "model": "mailer.mailing",
+    "pk": 3,
+    "fields": {
+        "start_datetime": "2025-06-06T09:00:00Z",
+        "end_datetime": "2025-07-07T09:00:00Z",
+        "status": "Launched",
+        "message": 1,
+        "is_disabled": true,
+        "owner": 1,
+        "recipient": [
+            1,
+            2,
+            3
+        ]
+    }
+},
+{
+    "model": "mailer.mailing",
+    "pk": 4,
+    "fields": {
+        "start_datetime": "2025-06-06T09:00:00Z",
+        "end_datetime": "2026-06-06T09:00:00Z",
+        "status": "Launched",
+        "message": 7,
+        "is_disabled": false,
+        "owner": 7,
+        "recipient": [
+            4
+        ]
+    }
+},
+{
+    "model": "mailer.mailing",
+    "pk": 5,
+    "fields": {
+        "start_datetime": "2025-07-06T21:00:00Z",
+        "end_datetime": "2025-09-06T21:00:00Z",
+        "status": "Completed",
+        "message": 5,
+        "is_disabled": false,
+        "owner": 6,
+        "recipient": [
+            5
+        ]
+    }
+},
+{
+    "model": "mailer.mailing",
+    "pk": 6,
+    "fields": {
+        "start_datetime": "2025-07-06T21:00:00Z",
+        "end_datetime": "2025-07-07T21:00:00Z",
+        "status": "Completed",
+        "message": 4,
+        "is_disabled": false,
+        "owner": 6,
+        "recipient": [
+            5
+        ]
+    }
+},
+{
+    "model": "mailer.mailing",
+    "pk": 7,
+    "fields": {
+        "start_datetime": "2025-02-06T21:00:00Z",
+        "end_datetime": "2025-03-06T21:00:00Z",
+        "status": "Completed",
+        "message": 4,
+        "is_disabled": false,
+        "owner": 6,
+        "recipient": [
+            5
+        ]
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 1,
+    "fields": {
+        "attempt_send_data": "2025-07-21T13:43:32.315Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю: tata@wwwwww-horse.admin - Ok",
+        "mailing": 1
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 2,
+    "fields": {
+        "attempt_send_data": "2025-07-21T13:43:32.831Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю: mila@wwwwww-horse.admin - Ok",
+        "mailing": 1
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 3,
+    "fields": {
+        "attempt_send_data": "2025-07-21T13:43:36.817Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю: poni@wwwwww-horse.admin - Ok",
+        "mailing": 2
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 4,
+    "fields": {
+        "attempt_send_data": "2025-07-21T13:43:37.332Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю: mila@wwwwww-horse.admin - Ok",
+        "mailing": 2
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 5,
+    "fields": {
+        "attempt_send_data": "2025-07-21T21:34:01.849Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю: tatu@tatuin.tat - Ok",
+        "mailing": 4
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 6,
+    "fields": {
+        "attempt_send_data": "2025-07-21T22:21:56.240Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю: saturn@solar.sys - Ok",
+        "mailing": 5
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 7,
+    "fields": {
+        "attempt_send_data": "2025-07-21T22:24:29.205Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю: saturn@solar.sys - Ok",
+        "mailing": 5
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 8,
+    "fields": {
+        "attempt_send_data": "2025-07-21T22:29:51.971Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю [2025-07-21 22:29:51.237362+00:00]: saturn@solar.sys - Ok",
+        "mailing": 5
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 9,
+    "fields": {
+        "attempt_send_data": "2025-07-21T22:33:57.993Z",
+        "attempt_status": "Failed",
+        "answer": "Ошибка отправки [2025-07-21 22:33:57.899482+00:00]: saturn@solar.sys 5: (535, b'5.7.8 Error: authentication failed: Invalid user or password! 1753137237-vXaKvV3M68c0')",
+        "mailing": 5
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 10,
+    "fields": {
+        "attempt_send_data": "2025-07-22T20:45:10.387Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю [2025-07-22 20:45:09.994745+00:00]: tata@wwwwww-horse.admin - Ok",
+        "mailing": 1
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 11,
+    "fields": {
+        "attempt_send_data": "2025-07-22T20:45:10.858Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю [2025-07-22 20:45:10.391104+00:00]: mila@wwwwww-horse.admin - Ok",
+        "mailing": 1
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 12,
+    "fields": {
+        "attempt_send_data": "2025-07-22T20:45:11.518Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю [2025-07-22 20:45:10.887719+00:00]: tatu@tatuin.tat - Ok",
+        "mailing": 4
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 13,
+    "fields": {
+        "attempt_send_data": "2025-07-23T14:24:18.504Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю [2025-07-23 14:24:18.026827+00:00]: poni@wwwwww-horse.admin - Ok",
+        "mailing": 1
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 14,
+    "fields": {
+        "attempt_send_data": "2025-07-23T14:24:19.127Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю [2025-07-23 14:24:18.509814+00:00]: mila@wwwwww-horse.admin - Ok",
+        "mailing": 1
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 15,
+    "fields": {
+        "attempt_send_data": "2025-07-23T14:25:18.807Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю [2025-07-23 14:25:18.432592+00:00]: poni@wwwwww-horse.admin - Ok",
+        "mailing": 1
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 16,
+    "fields": {
+        "attempt_send_data": "2025-07-23T14:25:19.208Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю [2025-07-23 14:25:18.813201+00:00]: tata@wwwwww-horse.admin - Ok",
+        "mailing": 1
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 17,
+    "fields": {
+        "attempt_send_data": "2025-07-23T14:25:19.675Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю [2025-07-23 14:25:19.211933+00:00]: mila@wwwwww-horse.admin - Ok",
+        "mailing": 1
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 19,
+    "fields": {
+        "attempt_send_data": "2025-07-23T17:05:09.425Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю [2025-07-23 17:05:08.605447+00:00]: poni@wwwwww-horse.admin - Ok",
+        "mailing": 1
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 20,
+    "fields": {
+        "attempt_send_data": "2025-07-23T17:05:09.824Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю [2025-07-23 17:05:09.428872+00:00]: tata@wwwwww-horse.admin - Ok",
+        "mailing": 1
+    }
+},
+{
+    "model": "mailer.mailingattempt",
+    "pk": 21,
+    "fields": {
+        "attempt_send_data": "2025-07-23T17:05:10.084Z",
+        "attempt_status": "Success",
+        "answer": "Отправлено получателю [2025-07-23 17:05:09.826458+00:00]: mila@wwwwww-horse.admin - Ok",
+        "mailing": 1
+    }
+}
+]

@@ -1,0 +1,67 @@
+[
+{
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$yLbjQQ0kleVDh5iFhh5P9l$fit5hJge9YtabBBbL0TtMXK9GsERjrgiz3TxArvBvl0=",
+        "last_login": "2025-07-23T18:24:15.961Z",
+        "is_superuser": true,
+        "first_name": "",
+        "last_name": "",
+        "is_staff": true,
+        "date_joined": "2025-07-20T19:46:04.976Z",
+        "email": "admin",
+        "avatar": "",
+        "phone": "",
+        "country": "",
+        "is_active": true,
+        "token": null,
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.user",
+    "pk": 6,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$yLbjQQ0kleVDh5iFhh5P9l$fit5hJge9YtabBBbL0TtMXK9GsERjrgiz3TxArvBvl0=",
+        "last_login": "2025-07-23T16:44:35.304Z",
+        "is_superuser": false,
+        "first_name": "",
+        "last_name": "",
+        "is_staff": false,
+        "date_joined": "2025-07-20T23:26:55.969Z",
+        "email": "spol@mail.ru",
+        "avatar": "",
+        "phone": "+12125552368",
+        "country": "",
+        "is_active": true,
+        "token": "1c2df89a0db572a0ef86d33fcb933089",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.user",
+    "pk": 7,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$yLbjQQ0kleVDh5iFhh5P9l$fit5hJge9YtabBBbL0TtMXK9GsERjrgiz3TxArvBvl0=",
+        "last_login": "2025-07-23T16:45:54.049Z",
+        "is_superuser": false,
+        "first_name": "Админ",
+        "last_name": "Меганов",
+        "is_staff": false,
+        "date_joined": "2025-07-21T20:11:00Z",
+        "email": "dummy@pisem.net",
+        "avatar": "users_avatars/sonic_avatar.png",
+        "phone": "+74951233626",
+        "country": "Россия",
+        "is_active": true,
+        "token": null,
+        "groups": [
+            3
+        ],
+        "user_permissions": []
+    }
+}
+]
