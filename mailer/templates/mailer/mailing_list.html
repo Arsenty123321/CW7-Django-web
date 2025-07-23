@@ -39,6 +39,11 @@
                 </div>
                 <div class="card-body">
                     <p><strong>Текс сообщения:</strong><br>{{ mailing.message.content|truncatechars:300 }}</p>
+
+                    {% if is_manager %}
+                    <p><strong>Владелец:</strong> {{ mailing.owner }}</p>
+                    {% endif %}
+
                     <p><strong>Status:</strong> {{ mailing.get_status_display }}</p>
 
                     <div class="row row-cols-1 row-cols-md-3 g-1">

@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'mailer',
     'users',
     "phonenumber_field",
+    "common",
 ]
 
 MIDDLEWARE = [

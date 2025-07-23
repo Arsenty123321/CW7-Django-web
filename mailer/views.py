@@ -132,11 +132,6 @@ class MessageListView(LoginRequiredMixin, ListView):
             return MailMessage.objects.all()
         return MailMessage.objects.filter(owner=self.request.user)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["is_manager"] = self.request.user.groups.filter(name="mailing_manager").exists()
-        return context
-
 
 class MessageDetailView(OwnerManagersRequiredMixin, DetailView):
     model = MailMessage
@@ -181,11 +176,6 @@ class RecipientListView(LoginRequiredMixin, ListView):
         if self.request.user.groups.filter(name="mailing_manager").exists():
             return MailingRecipient.objects.all()
         return MailingRecipient.objects.filter(owner=self.request.user)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["is_manager"] = self.request.user.groups.filter(name="mailing_manager").exists()
-        return context
 
 
 class RecipientDetailView(OwnerManagersRequiredMixin, DetailView):

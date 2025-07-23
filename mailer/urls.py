@@ -32,5 +32,4 @@ urlpatterns = [
     path("mailing_detail_stats/<int:pk>/", MailingDetailStatsView.as_view(), name="mailing_stats_detail"),
     path("stats/", MailingStatsView.as_view(), name="mailing_stats"),
     path('mailing_complete_func/<int:pk>/', mailing_complete_view, name='mailing_complete_func'),
-    #    path('run_mailing/<int:id>/', execute_service_function, name='run_mailing'),
 ]

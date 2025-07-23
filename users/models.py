@@ -11,7 +11,7 @@ class User(AbstractUser):
                                help_text="Загрузите свой аватар")
     phone = PhoneNumberField(verbose_name="Телефон", blank=True, help_text="Введите номер телефона")
     country = models.CharField(max_length=35, verbose_name="Страна", blank=True, help_text="Введите название страны")
-    is_active = models.BooleanField(default=True, null=True, blank=True)
+    is_active = models.BooleanField(default=False, blank=False)
 
     token = models.CharField(max_length=100, verbose_name="Token", blank=True, null=True)
 
