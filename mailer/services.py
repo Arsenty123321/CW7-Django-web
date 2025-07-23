@@ -2,9 +2,10 @@ from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.utils import timezone
 
-from config.settings import EMAIL_HOST_USER
+from django.core.cache import cache
+from config.settings import EMAIL_HOST_USER, CACHE_ENABLED
 
-from mailer.models import Mailing, MailingAttempt, MailingRecipient
+from mailer.models import Mailing, MailingAttempt, MailingRecipient, MailMessage
 
 
 def validate_mailing(mailing):
@@ -150,3 +151,59 @@ def get_general_stats():
         "mailing_launched": mailing_launched,
         "mailing_recipient_total": mailing_recipient_total,
     }
+
+
+def get_messages_from_cache_from_user(user):
+    """
+        Получает данные из кэша, если пуст, то кеширует возврат из БД.
+    """
+
+    if not CACHE_ENABLED:
+        return MailMessage.objects.filter(owner=user)
+
+    key = f"messages_list_{user}"
+    messages = cache.get(key)
+
+    if messages is not None:
+        return messages
+    messages = MailMessage.objects.filter(owner=user)
+    cache.set(key, messages, 60 * 30)
+    return messages
+
+
+def remove_messages_cache_from_user(user):
+    """
+        Удаляет данные из кэша.
+    """
+
+    if CACHE_ENABLED:
+        key = f"messages_list_{user}"
+        cache.delete(key)
+
+
+def get_recipients_from_cache_from_user(user):
+    """
+        Получает данные из кэша, если пуст, то кеширует возврат из БД.
+    """
+
+    if not CACHE_ENABLED:
+        return MailingRecipient.objects.filter(owner=user)
+
+    key = f"recipients_list_{user}"
+    recipients = cache.get(key)
+
+    if recipients is not None:
+        return recipients
+    recipients = MailingRecipient.objects.filter(owner=user)
+    cache.set(key, recipients, 60 * 30)
+    return recipients
+
+
+def remove_recipients_cache_from_user(user):
+    """
+        Удаляет данные из кэша.
+    """
+
+    if CACHE_ENABLED:
+        key = f"recipients_list_{user}"
+        cache.delete(key)

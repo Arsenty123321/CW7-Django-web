@@ -9,7 +9,9 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 from mailer.forms import MailingForm, MailingDisableForm
 from mailer.mixins import OwnerRequiredMixin, OwnerManagersRequiredMixin
 from mailer.models import Mailing, MailMessage, MailingRecipient
-from mailer.services import get_user_stats, get_mailings_stats, get_general_stats, send_mailing, set_mailing_status
+from mailer.services import get_user_stats, get_mailings_stats, get_general_stats, send_mailing, set_mailing_status, \
+    remove_messages_cache_from_user, get_messages_from_cache_from_user, get_recipients_from_cache_from_user, \
+    remove_recipients_cache_from_user
 
 
 class HomeTemplateView(TemplateView):
@@ -130,7 +132,10 @@ class MessageListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         if self.request.user.groups.filter(name="mailing_manager").exists():
             return MailMessage.objects.all()
-        return MailMessage.objects.filter(owner=self.request.user)
+
+        # Кешируем объекты пользователя
+        queryset = get_messages_from_cache_from_user(self.request.user)
+        return queryset
 
 
 class MessageDetailView(OwnerManagersRequiredMixin, DetailView):
@@ -148,6 +153,8 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         user = self.request.user
         form.instance.owner = user
+        # Удаляем кэш сообщений пользователя, когда создаем новое сообщение
+        remove_messages_cache_from_user(user)
         return super().form_valid(form)
 
 
@@ -155,6 +162,12 @@ class MessageUpdateView(OwnerRequiredMixin, UpdateView):
     model = MailMessage
     fields = ("title", "content")
     template_name = "mailer/message_form.html"
+
+    def form_valid(self, form):
+        user = self.request.user
+        # Удаляем кэш сообщений пользователя, когда изменяем сообщение
+        remove_messages_cache_from_user(user)
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse("mailer:message_detail", args=[self.kwargs.get("pk")])
@@ -166,6 +179,12 @@ class MessageDeleteView(OwnerRequiredMixin, DeleteView):
     template_name = "mailer/message_confirm_delete.html"
     success_url = reverse_lazy("mailer:message_list")
 
+    def form_valid(self, form):
+        user = self.request.user
+        # Удаляем кэш сообщений пользователя, когда удаляем сообщение
+        remove_messages_cache_from_user(user)
+        return super().form_valid(form)
+
 
 class RecipientListView(LoginRequiredMixin, ListView):
     model = MailingRecipient
@@ -175,7 +194,9 @@ class RecipientListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         if self.request.user.groups.filter(name="mailing_manager").exists():
             return MailingRecipient.objects.all()
-        return MailingRecipient.objects.filter(owner=self.request.user)
+        # Кешируем объекты пользователя
+        queryset = get_recipients_from_cache_from_user(self.request.user)
+        return queryset
 
 
 class RecipientDetailView(OwnerManagersRequiredMixin, DetailView):
@@ -193,6 +214,8 @@ class RecipientCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         user = self.request.user
         form.instance.owner = user
+        # Удаляем кэш получателей пользователя, когда добавляем нового получателя
+        remove_recipients_cache_from_user(user)
         return super().form_valid(form)
 
 
@@ -200,6 +223,12 @@ class RecipientUpdateView(OwnerRequiredMixin, UpdateView):
     model = MailingRecipient
     fields = ("email", "full_name", "comment")
     template_name = "mailer/recipient_form.html"
+
+    def form_valid(self, form):
+        user = self.request.user
+        # Удаляем кэш получателей пользователя, когда изменяем получателя
+        remove_recipients_cache_from_user(user)
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse("mailer:recipient_detail", args=[self.kwargs.get("pk")])
@@ -210,6 +239,12 @@ class RecipientDeleteView(OwnerRequiredMixin, DeleteView):
     context_object_name = "recipient"
     template_name = "mailer/recipient_confirm_delete.html"
     success_url = reverse_lazy("mailer:recipient_list")
+
+    def form_valid(self, form):
+        user = self.request.user
+        # Удаляем кэш получателей пользователя, когда удаляем получателя
+        remove_recipients_cache_from_user(user)
+        return super().form_valid(form)
 
 
 @login_required
