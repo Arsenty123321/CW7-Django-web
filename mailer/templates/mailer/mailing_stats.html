@@ -1,0 +1,16 @@
+<!-- mailing_stats.html -->
+
+{% extends 'mailer/base.html' %}
+
+{% block content %}
+<h1 align="center">Общая статистика всех рассылок пользователя: {{ user }}</h1>
+
+<div>
+    <h2>Общие показатели рассылок</h2><br>
+    <p>Всего попыток отправки писем: <strong>{{ user_stats.total }}</strong></p>
+    <p>Успешных отправок писем: <strong>{{ user_stats.success }}</strong></p>
+    <p>Неудачных отправок писем: <strong>{{ user_stats.failed }}</strong></p>
+    <p>Процент успеха: <strong>{{ user_stats.success_rate|floatformat:2 }}%</strong></p>
+</div>
+
+{% endblock %}

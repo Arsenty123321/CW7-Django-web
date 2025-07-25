@@ -1,0 +1,38 @@
+<!-- mailing_detail_stats.html -->
+
+{% extends 'mailer/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center mb-4">
+    <h1>Попытки рассылки</h1><br>
+</div>
+<h2>Статистика по рассылке ID={{ mailing.id }}: {{ mailing.message.title }}</h2>
+
+<div class="card">
+    <h2>Общие показатели</h2>
+    <p>Всего попыток: <strong>{{ mailing_stats.total }}</strong></p>
+    <p>Успешных: <strong>{{ mailing_stats.success }}</strong></p>
+    <p>Неудачных: <strong>{{ mailing_stats.failed }}</strong></p>
+    <p>Процент успеха: <strong>{{ mailing_stats.success_rate|floatformat:2 }}%</strong></p>
+    <br><br>
+    <h2>Ответы сервера:</h2>
+    <ol>
+        {% for answer in mailing_stats.server_answers %}
+        <li>{{ answer }}</li>
+        {% empty %}
+        Отправок не производилось
+        {% endfor %}
+    </ol>
+    <div class="row row-cols-1 row-cols-md-1 g-4 ">
+        <div class="col">
+            <div class="d-flex justify-content-center align-items-center mb-5">
+                <a href="{% url 'mailer:mailing_list' %}">
+                    <button type="button" class="btn btn-lg btn-block btn-outline-primary">Назад
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

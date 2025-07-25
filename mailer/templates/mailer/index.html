@@ -1,0 +1,71 @@
+<!-- index.html -->
+{% extends 'mailer/base.html' %}
+
+{% block content %}
+
+<!-- Index -->
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-1 g-4">
+        <div class="col">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header text-center">
+                    <h4 class="my-0 font-weight-normal">Сервис рассылок</h4>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-center align-items-center mb-5">
+                        <img src="/media/mailer_images/email-service.png" class="img-fluid"
+                             alt="Image">
+                    </div>
+
+                    <div class="d-flex justify-content-center align-items-center mb-5">
+                        <div class="row row-cols-1 row-cols-md-1 g-1">
+                            <h5>Наши достижения:</h5>
+                            <ul>
+                                <li>Всего рассылок: <strong>{{ general_stats.mailing_total }}</strong></li>
+                                <li>Активных рассылок: <strong>{{ general_stats.mailing_launched }}</strong></li>
+                                <li>Уникальных получателей: <strong>{{ general_stats.mailing_recipient_total }}</strong></li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <div class="row row-cols-1 row-cols-md-1 g-4 ">
+                        <div class="col">
+                            <div class="d-flex justify-content-center gap-5 align-items-center mb-5">
+                                {% if user.is_authenticated %}
+                                <h4 class="my-0 font-weight-normal">Добро пожаловать
+                                    {% if user.first_name %}
+                                    {{user.first_name }}
+                                    {% else %}
+                                    {{ user.email }}
+                                    {% endif %}!</h4>
+
+                                <a href="{% url 'mailer:mailing_list' %}">
+                                    <button type="button" class="btn btn-lg btn-block btn-outline-primary">Перейти к
+                                        рассылкам
+                                    </button>
+                                </a>
+                                {% else %}
+                                <a href="{% url 'users:login' %}">
+                                    <button type="button" class="btn btn-lg btn-block btn-outline-primary">Вход
+                                    </button>
+                                </a>
+                                <a href="{% url 'users:register' %}">
+                                    <button type="button" class="btn btn-lg btn-block btn-outline-primary">Регистрация
+                                    </button>
+                                </a>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Index - конец-->
+
+{% endblock %}

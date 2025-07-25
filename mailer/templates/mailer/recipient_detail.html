@@ -1,0 +1,42 @@
+<!-- recipient_detail.html -->
+
+{% extends 'mailer/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-1 g-4">
+        <div class="col">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header text-center">
+                    <h4 class="my-0 font-weight-normal">
+                        ID : {{ recipient.id }}</h4>
+                </div>
+                <div class="card-body">
+                    <h4>Почтовый адрес:</h4>
+                    <p>{{ recipient.email}}</p>
+                    <br>
+                    <h4>Полное имя:</h4>
+                    <p>{{ recipient.full_name }}</p>
+                    <br>
+                    <h4>Комментарий:</h4>
+                    <p>{{ recipient.comment }}</p>
+                    <div class="row row-cols-1 row-cols-md-1 g-4 ">
+                        <div class="col">
+                            <div class="d-flex justify-content-center align-items-center mb-5">
+                                <a href="{% url 'mailer:recipient_list' %}">
+                                    <button type="button" class="btn btn-lg btn-block btn-outline-primary">Назад
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

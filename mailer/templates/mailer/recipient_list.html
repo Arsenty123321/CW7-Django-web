@@ -1,0 +1,77 @@
+<!-- recipient_list.html -->
+
+{% extends 'mailer/base.html' %}
+
+{% block title %} Сервис рассылок : Рассылки {% endblock %}
+
+{% block content %}
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-6">Получатели:</h1>
+</div>
+
+<!--Список получателей-->
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+
+        {% for recipient in recipients %}
+
+        <div class="col">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header text-center">
+                    <h4 class="my-0 font-weight-normal"><img src="/media/mailer_images/recipient_icon.png" class="leftimg"
+                             style="height: 25px;"> {{ recipient.email }}:
+                        {{ recipient.full_name | truncatechars:40}}</h4>
+                </div>
+                <div class="card-body">
+                    <p>Комментарий: {{ recipient.comment|truncatechars:300 }}</p>
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        <div class="col">
+                            <a href="{% url 'mailer:recipient_detail' recipient.id %}">
+                                <button type="button" class="btn btn-md btn-block btn-outline-primary">
+                                    Просмотреть
+                                </button>
+                            </a>
+                        </div>
+                        {% if user == recipient.owner %}
+                        <div class="col">
+                            <a href="{% url 'mailer:recipient_update' recipient.id %}">
+                                <button type="button" class="btn btn-md btn-block btn-outline-primary">
+                                    Редактировать
+                                </button>
+                            </a>
+                        </div>
+                        <div class="col">
+                            <div class="mt-auto d-flex justify-content-end">
+                                <a class="btn btn-danger" href="{% url 'mailer:recipient_delete' recipient.pk %}"
+                                   role="button">Удалить</a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!--                {#% if mailing.status == "blocked" %}-->
+                <!--                <div class="card-footer text-white bg-danger text-center">-->
+                <!--                    {{ mailing.status }}-->
+                <!--                </div>-->
+                <!--                {#% endif %}-->
+
+            </div>
+        </div>
+
+        <!--        {#% endif %}-->
+
+        {% endfor %}
+    </div>
+    <!--    {#% if user.is_authenticated %}-->
+    <div class="text-center">
+        <a class="btn btn-primary btn-lg shadow" href="{% url 'mailer:recipient_create' %}" role="button">Добавить
+            получателя</a>
+        <br>
+    </div>
+    <!--    {#% endif %}-->
+</div>
+<!--Список продуктов - конец-->
+
+{% endblock %}
